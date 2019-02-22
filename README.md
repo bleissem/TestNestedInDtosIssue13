@@ -10,7 +10,7 @@ and [issue 13](https://github.com/JonPSmith/EfCore.GenericServices/issues/13)
 I faced a problem when __only__ updating nested dto's 
 
 
-The problem as fas as I analyzed it is that in 
+The problem as far as I analyzed it is that in 
 
 [CreateMapper](https://github.com/JonPSmith/EfCore.GenericServices/blob/master/GenericServices/Internal/MappingCode/CreateMapper.cs)
 
