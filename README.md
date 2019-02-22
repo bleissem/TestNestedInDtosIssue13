@@ -2,7 +2,7 @@
 
 [![Build status](https://bleissem.visualstudio.com/githubpipeline/_apis/build/status/githubpipeline-ASP.NET%20Core%20(.NET%20Framework)-CI)](https://bleissem.visualstudio.com/githubpipeline/_build/latest?definitionId=79)
 
-don't forget to use your own connection string in appsettings.json
+don't forget to use your own connection string in appsettings.json and publish SQL database project first
 
 based on 
 [TestNestedInDtosIssue13](https://github.com/bleissem/EfCore.GenericServices/blob/master/Tests/UnitTests/GenericServicesPublic/TestNestedInDtosIssue13.cs)
