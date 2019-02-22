@@ -47,7 +47,7 @@ namespace WebApplication1.Controllers
                 SELECT @ContactAddressId");
             }
           
-            InContactAddressDto updateDTO = service.ReadSingle<InContactAddressDto>(w => w.ContactAddressId == contactAddressId); //.ReadManyNoTracked<InContactAddressDto>().Include(i => i.Addess).Where(w => w.Name == "test").FirstOrDefault();
+            InContactAddressDto updateDTO = service.ReadSingle<InContactAddressDto>(w => w.ContactAddressId == contactAddressId);
 
             updateDTO.Name = "test2";
             updateDTO.Addess.Address1 = "other street";
