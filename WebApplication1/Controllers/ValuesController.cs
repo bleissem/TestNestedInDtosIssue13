@@ -65,6 +65,13 @@ namespace WebApplication1.Controllers
             return new string[] { "value1", "value2" };
         }
 
+        // GET api/values
+        [HttpGet("[action]")]
+        public ActionResult<InContactAddressDto> DoesNotWorkWithoutDapper([FromServices] ICrudServices service, [FromServices] MyDBContext context, int key)
+        {
+            return service.ReadSingle<InContactAddressDto>(w => w.ContactAddressId == key);
+        }
+
         [HttpGet("[action]")]
         public ActionResult<IEnumerable<string>> WorksGreat([FromServices] ICrudServices service, [FromServices] MyDBContext context, [FromServices] IConfiguration config)
         {
