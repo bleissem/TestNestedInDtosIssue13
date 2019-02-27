@@ -80,14 +80,23 @@ namespace Test
             using (var context = new MyDBContext(options))
             {
                 var utData = context.SetupSingleDtoAndEntities<InContactAddressDto>();
-                var service = new CrudServices(context, utData.ConfigAndMapper);
+                var service = new CrudServices(context, utData.ConfigAndMapper);                
+
                 var controller = new ValuesController();
 
                 //ATTEMPT
                 var result = controller.DoesNotWorkWithoutDapper(service, context, 1);
 
+                InContactAddressDto toBeUpdated = result.Value;
+
                 //VERIFY
-                result.Value.Addess.ShouldNotBeNull();
+                toBeUpdated.Addess.ShouldNotBeNull();
+
+                toBeUpdated.Addess.City = "London";
+
+                // throws: AutoMapper.AutoMapperMappingException: 'Error mapping types.'
+                service.UpdateAndSave(toBeUpdated);
+
             }
         }
     }
