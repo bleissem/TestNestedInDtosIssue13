@@ -19,5 +19,7 @@ namespace ClassLibrary1.DTOs
         public string StateOrProvice { get; set; }
         public string PostalCode { get; set; }
         public string CountryCode { get; set; }
+
+        public InContactAddressDto IdNavigation { get; set; }
     }
 }
