@@ -31,6 +31,11 @@ namespace WebApplication1.Controllers
                 contactAddressId = dbConnection.QueryFirst<int>(@"
                                             SET NOCOUNT ON;
 
+                                            -- deletes previous records to only have one entry in db at a time
+                                            DELETE FROM [AddressNotOwned]
+                                            DELETE FROM [ContactAddress]
+
+                                            -- adds a new entry and returns Id 
                                             DECLARE @ContactAddressId INT
                                             INSERT INTO[ContactAddress]([Name])
                                             VALUES('new Address');
@@ -44,7 +49,8 @@ namespace WebApplication1.Controllers
                                             INSERT INTO[AddressNotOwned] ([Id], [Address1])
                                             VALUES(@ContactAddressId, 'some street');
 
-                SELECT @ContactAddressId");
+                                            SELECT @ContactAddressId
+                ");
             }
           
             InContactAddressDto updateDTO = service.ReadSingle<InContactAddressDto>(w => w.ContactAddressId == contactAddressId);
