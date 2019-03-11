@@ -73,10 +73,10 @@ namespace GenericServices.Internal.MappingCode
             public TEntity ReturnExistingEntity(object[] keys)
             {
                 //current code that does not include navigation properties on update
-                // return _context.Set<TEntity>().Find(keys);
+                return _context.Set<TEntity>().Find(keys);
                 
                 // code to demonstrate what happens if include is done 
-                return _context.Set<TEntity>().Include("AddressNotOwned").FirstOrDefault();                
+                // return _context.Set<TEntity>().Include("AddressNotOwned").FirstOrDefault();                
             }
 
             public IQueryable<TDto> GetViaKeysWithProject(params object[] keys)
