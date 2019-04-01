@@ -167,7 +167,13 @@ namespace GenericServices.PublicButHidden
         }
 
         /// <inheritdoc />
-        public void UpdateAndSave<T>(T entityOrDto, string methodName = null) where T : class
+        public void UpdateAndSave<T>(T entityOrDto, params Expression<Func<T, object>>[] includes) where T : class
+        {
+            UpdateAndSave(entityOrDto, methodName: null, includes: includes);
+        }
+
+        /// <inheritdoc />
+        public void UpdateAndSave<T>(T entityOrDto, string methodName, params Expression<Func<T, object>>[] includes) where T : class
         {
             var entityInfo = _context.GetEntityInfoThrowExceptionIfNotThere(typeof(T));
             entityInfo.CheckCanDoOperation(CrudTypes.Update);
@@ -185,7 +191,37 @@ namespace GenericServices.PublicButHidden
             {
                 var dtoInfo = typeof(T).GetDtoInfoThrowExceptionIfNotThere();
                 var updater = new EntityUpdateHandler<T>(dtoInfo, entityInfo, _configAndMapper, _context);
-                CombineStatuses(updater.ReadEntityAndUpdateViaDto(entityOrDto, methodName));
+                CombineStatuses(updater.ReadEntityAndUpdateViaDto(entityOrDto, methodName, includes));
+                if (IsValid)
+                    CombineStatuses(_context.SaveChangesWithOptionalValidation(
+                        dtoInfo.ShouldValidateOnSave(_configAndMapper.Config), _configAndMapper.Config));
+            }
+        }
+
+        /// <inheritdoc />
+        public void UpdateWithActionAndSave<TDto, TEntity>(Func<DbContext, TEntity, IStatusGeneric> runBeforeUpdate, TDto entityOrDto, string methodName = null, params Expression<Func<TDto, object>>[] includes) where TDto : class where TEntity : class
+        {
+            var entityInfo = _context.GetEntityInfoThrowExceptionIfNotThere(typeof(TDto));
+
+            var entity = _context.Set<TEntity>().Find(entityOrDto.GetType().GetProperty(entityInfo.PrimaryKeyProperties[0].Name).GetValue(entityOrDto));
+            CombineStatuses(runBeforeUpdate(_context, entity));
+            if (!IsValid) return;
+
+            Message = $"Successfully updated the {entityInfo.EntityType.GetNameForClass()}";
+            if (entityInfo.EntityType == typeof(TDto))
+            {
+                if (!_context.Entry(entityOrDto).IsKeySet)
+                    throw new InvalidOperationException($"The primary key was not set on the entity class {typeof(TDto).Name}. For an update we expect the key(s) to be set (otherwise it does a create).");
+                if (_context.Entry(entityOrDto).State == EntityState.Detached)
+                    _context.Update(entityOrDto);
+                CombineStatuses(_context.SaveChangesWithOptionalValidation(
+                    _configAndMapper.Config.DirectAccessValidateOnSave, _configAndMapper.Config));
+            }
+            else
+            {
+                var dtoInfo = typeof(TDto).GetDtoInfoThrowExceptionIfNotThere();
+                var updater = new EntityUpdateHandler<TDto>(dtoInfo, entityInfo, _configAndMapper, _context);
+                CombineStatuses(updater.ReadEntityAndUpdateViaDto(entityOrDto, methodName, includes));
                 if (IsValid)
                     CombineStatuses(_context.SaveChangesWithOptionalValidation(
                         dtoInfo.ShouldValidateOnSave(_configAndMapper.Config), _configAndMapper.Config));
