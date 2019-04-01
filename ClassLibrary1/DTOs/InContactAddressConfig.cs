@@ -12,7 +12,7 @@ namespace ClassLibrary1.DTOs
         {
             get
             {
-                return cfg => cfg.ForMember(d => d.Addess, opt => opt.MapFrom(src => src.AddressNotOwned));
+                return cfg => cfg.ForMember(d => d.AddressNotOwned, opt => opt.MapFrom(src => src.AddressNotOwned));
             }
         }
 
@@ -22,7 +22,7 @@ namespace ClassLibrary1.DTOs
         {
             get
             {
-                return cfg => cfg.ForMember(d => d.AddressNotOwned, opt => opt.MapFrom(src => src.Addess));
+                return cfg => cfg.ForMember(d => d.AddressNotOwned, opt => opt.MapFrom(src => src.AddressNotOwned));
             }
         }
     }

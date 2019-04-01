@@ -60,7 +60,7 @@ namespace Test
                 var result = service.ReadSingle<InContactAddressDto>(1);
 
                 //VERIFY
-                result.Addess.ShouldNotBeNull();
+                result.AddressNotOwned.ShouldNotBeNull();
             }
         }
 
@@ -90,12 +90,12 @@ namespace Test
                 InContactAddressDto toBeUpdated = result.Value;
 
                 //VERIFY
-                toBeUpdated.Addess.ShouldNotBeNull();
+                toBeUpdated.AddressNotOwned.ShouldNotBeNull();
 
-                toBeUpdated.Addess.City = "London";
+                toBeUpdated.AddressNotOwned.City = "London";
 
                 // throws: AutoMapper.AutoMapperMappingException: 'Error mapping types.'
-                service.UpdateAndSave(toBeUpdated);
+                service.UpdateAndSave(toBeUpdated, a => a.AddressNotOwned);
 
             }
         }

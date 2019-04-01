@@ -13,6 +13,6 @@ namespace ClassLibrary1.DTOs
         public int ContactAddressId { get; set; }
         public string Name { get; set; }
 
-        public virtual InAddressDto Addess { get; set; }
+        public virtual InAddressDto AddressNotOwned { get; set; }
     }
 }

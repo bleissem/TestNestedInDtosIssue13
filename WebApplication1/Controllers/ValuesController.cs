@@ -56,7 +56,7 @@ namespace WebApplication1.Controllers
             InContactAddressDto updateDTO = service.ReadSingle<InContactAddressDto>(w => w.ContactAddressId == contactAddressId);
 
             updateDTO.Name = "test2";
-            updateDTO.Addess.Address1 = "other street";
+            updateDTO.AddressNotOwned.Address1 = "other street";
 
             service.UpdateAndSave(updateDTO);
 
@@ -89,7 +89,7 @@ namespace WebApplication1.Controllers
             var dto = new InContactAddressDto
             {
                 Name = "test",
-                Addess = new InAddressDto
+                AddressNotOwned = new InAddressDto
                 {
                     Address1 = "some street"
                 }
@@ -105,7 +105,7 @@ namespace WebApplication1.Controllers
             InContactAddressDto updateDTO = service.ReadSingle<InContactAddressDto>(w => w.Name == "test");
 
             updateDTO.Name = "test2";
-            updateDTO.Addess.Address1 = "other street";
+            updateDTO.AddressNotOwned.Address1 = "other street";
 
             service.UpdateAndSave(updateDTO);
 
